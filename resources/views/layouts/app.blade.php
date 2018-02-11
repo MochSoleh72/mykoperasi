@@ -27,7 +27,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li><a class="nav-link" href="{{ route('loan-requests.index') }}">Pinjaman</a></li>
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <li><a class="nav-link" href="{{ route('reviews') }}">Pinjaman Baru</a></li>
+                            <li><a class="nav-link" href="#">Laporan</a></li>
+                        @endif
+
+                        @if (auth()->check() && auth()->user()->isMember())
+                            <li><a class="nav-link" href="{{ route('loan-requests.index') }}">Pinjaman</a></li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

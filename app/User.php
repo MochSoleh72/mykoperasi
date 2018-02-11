@@ -36,6 +36,11 @@ class User extends Authenticatable
         return $this->level == static::ACCESS_ADMIN;
     }
 
+    public function isMember()
+    {
+        return $this->level == static::ACCESS_MEMBER;
+    }
+
     public function loanRequests()
     {
         return $this->hasMany(LoanRequest::class, 'member_id');

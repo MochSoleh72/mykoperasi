@@ -21,12 +21,12 @@ class LoanRequest extends Model
         'is_approved' => 'boolean',
     ];
 
-    public function admin()
+    public function reviewBy()
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
 
-    public function member()
+    public function owner()
     {
         return $this->belongsTo(User::class, 'member_id');
     }
