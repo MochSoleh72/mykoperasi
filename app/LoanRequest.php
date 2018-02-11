@@ -47,6 +47,10 @@ class LoanRequest extends Model
             return "Approved";
         }
 
+        if (!$this->is_approved && $this->admin_id) {
+            return "Rejected";
+        }
+
         if ($this->is_submitted) {
             return "Waiting Approval";
         }

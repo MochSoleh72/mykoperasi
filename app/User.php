@@ -45,4 +45,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(LoanRequest::class, 'member_id');
     }
+
+    public function scopeMember($query)
+    {
+        return $query->where('level', User::ACCESS_MEMBER);
+    }
+
+    public function scopeAdmin($query)
+    {
+        return $query->where('level', User::ACCESS_ADMIN);
+    }
 }

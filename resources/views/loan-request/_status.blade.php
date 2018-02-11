@@ -1,6 +1,7 @@
 @switch ($loanRequest->status) 
     @case('Approved')
-    @case("Waiting Approval")
+    @case('Rejected')
+    @case('Waiting Approval')
         <a href="{{ route('loan-requests.show', $loanRequest->id) }}">Lihat</a>
         @break
     @default
