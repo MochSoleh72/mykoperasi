@@ -32,13 +32,13 @@
 								<div class="row">
 									<div class="col-4">
 										{!! Form::model($loanRequest, ['route' => ['reviews.approve', $loanRequest->id], 'method' => 'patch', 'class' => 'form-inline'] ) !!}
-											{!! Form::submit('Approve', ['class'=>'btn btn-xs btn-primary']) !!}
+											{!! Form::submit('Approve', ['class'=>'btn btn-sm btn-primary']) !!}
 										{!! Form::close()!!}
 									</div>
 									<div class="col-4">
 
 										{!! Form::model($loanRequest, ['route' => ['reviews.reject', $loanRequest->id], 'method' => 'patch', 'class' => 'form-inline'] ) !!}
-											{!! Form::submit('Reject', ['class'=>'btn btn-xs btn-danger']) !!}
+											{!! Form::submit('Reject', ['class'=>'btn btn-sm btn-danger']) !!}
 										{!! Form::close()!!}
 									</div>
 								</div>
