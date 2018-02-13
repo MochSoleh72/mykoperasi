@@ -3,6 +3,9 @@
 use Illuminate\Database\Seeder;
 use App\LoanRequest;
 use App\User;
+use App\Loan;
+use Carbon\Carbon;
+use App\Payment;
 
 class LoanSeeder extends Seeder
 {
@@ -13,12 +16,11 @@ class LoanSeeder extends Seeder
     {
         $admin = User::admin()->first();
         foreach (User::member()->get() as $user) {
-            $this->makeSubmittedLoan($user, 10)
-                ->makedraftLoan($user, 3)
-                ->approveLoan($user, $admin, 5)
-                ->rejectLoan($user, $admin, 3)
-                ->payLoan($user, 3)
-                ->fullyPayLoan($user, 1);
+            $this->makeDraftLoan($user, 3)
+                ->makeSubmittedLoan($user, 3)
+                ->makeRejectedLoan($user, $admin, 3)
+                ->makeOngoingLoan($user, $admin, 2, rand(1,4))
+                ->makeCompletedLoan($user, $admin, 2);
         }
     }
 
@@ -26,7 +28,7 @@ class LoanSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         while ($total > 0) {
-            $date = $faker->dateTimeThisYear();
+            $date = $faker->dateTimeThisMonth();
             factory(LoanRequest::class)->create([
                 'member_id' => $user->id,
                 'is_submitted' => true,
@@ -41,7 +43,7 @@ class LoanSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         while ($total > 0) {
-            $date = $faker->dateTimeThisYear();
+            $date = $faker->dateTimeThisMonth();
             factory(LoanRequest::class)->create([
                 'member_id' => $user->id,
                 'is_submitted' => false,
@@ -52,34 +54,74 @@ class LoanSeeder extends Seeder
         return $this;
     }
 
-    public function approveLoan(User $user, User $admin, $total)
+    public function makeRejectedLoan(User $user, User $admin, $total)
     {
-        $data = $user->loanRequests()->waitingApproval()->get()
-            ->random($total)
-            ->each(function($loanRequest) use ($admin) {
-                $loanRequest->update(['is_approved' => true, 'admin_id' => $admin->id]);
-            });
-
+        $faker = Faker\Factory::create();
+        while ($total > 0) {
+            $date = $faker->dateTimeThisYear();
+            factory(LoanRequest::class)->create([
+                'member_id' => $user->id,
+                'is_submitted' => true,
+                'created_at' => $date,
+                'is_approved' => false,
+                'admin_id' => $admin->id
+            ]);
+            $total--;
+        }
         return $this;
     }
 
-    public function rejectLoan(User $user, User $admin, $total)
+    public function makeOngoingLoan(User $user, User $admin, $total, $monthLeftToPay = 0)
     {
-        $user->loanRequests()->waitingApproval()->get()
-            ->random($total)
-            ->each(function($loanRequest) use ($admin) {
-                $loanRequest->update(['is_approved' => false, 'admin_id' => $admin->id]);
-            });
+        $faker = Faker\Factory::create();
+        while ($total > 0) {
+            $totalMonth = $faker->randomElement([6,12,18,24]);
+            $amountPerMonth = rand(1,4) * 1000000;
+            $totalAmount = $amountPerMonth * $totalMonth;
+            $totalPaidMonth = $totalMonth - $monthLeftToPay;
+            $createDate = Carbon::now()->subMonths($totalPaidMonth);
+            // create loan request
+            $loanRequest = factory(LoanRequest::class)->create([
+                'member_id' => $user->id,
+                'is_submitted' => true,
+                'is_approved' => true,
+                'admin_id' => $admin->id,
+                'member_id' => $user->id,
+                'amount' => $totalAmount,
+                'created_at' => $createDate,
+                'updated_at' => $createDate,
+                'duration' => $totalMonth
+            ]);
+            // create loan
+            $loan = factory(Loan::class)->create([
+                'member_id' => $user->id,
+                'admin_id' => $admin->id,
+                'duration' => $totalMonth,
+                'is_completed' => $monthLeftToPay == 0 ? true : false,
+                'monthly_amount' => $amountPerMonth,
+                'total_paid' => ($totalAmount / $totalMonth) * $totalPaidMonth,
+                'total_amount' => $loanRequest->amount,
+                'created_at' => $createDate,
+            ]);
+            // pay loan each month
+            while ($totalPaidMonth > 0) {
+                $paymentDate = Carbon::now()->subMonths($totalPaidMonth);
+                factory(Payment::class)->create([
+                    'loan_id' => $loan->id,
+                    'admin_id' => $admin->id,
+                    'created_at' => $paymentDate,
+                    'updated_at' => $paymentDate,
+                ]);
+                $totalPaidMonth--;
+            }
+
+            $total--;
+        }
         return $this;
     }
 
-    public function payLoan(User $user, $total)
+    public function makeCompletedLoan(User $user, User $admin, $total)
     {
-        return $this;
-    }
-
-    public function fullyPayLoan(User $user, $total)
-    {
-        return $this;
+        return $this->makeOngoingLoan($user, $admin, $total, 0);
     }
 }

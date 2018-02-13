@@ -27,4 +27,5 @@ Route::middleware(['auth'])->group(function() {
     Route::get('review', 'ReviewController@index')->name('reviews');
     Route::patch('review/{loan_request}/approve', 'ReviewController@approve')->name('reviews.approve');
     Route::patch('review/{loan_request}/reject', 'ReviewController@reject')->name('reviews.reject');
+    Route::resource('payments', 'PaymentController');
 });
