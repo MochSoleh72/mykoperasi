@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\LoanRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoanRequestStore;
 
 class LoanRequestController extends Controller
 {
@@ -25,6 +26,7 @@ class LoanRequestController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', LoanRequest::class);
         return view('loan-request.create');
     }
 
@@ -34,8 +36,9 @@ class LoanRequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LoanRequestStore $request)
     {
+        $this->authorize('create', LoanRequest::class);
         $payload = $request->only('amount', 'duration', 'is_submitted') + ['member_id' => auth()->user()->id];
 		$loanRequest = LoanRequest::create($payload);
 
@@ -50,6 +53,7 @@ class LoanRequestController extends Controller
      */
     public function show(LoanRequest $loanRequest)
     {
+        $this->authorize('view', $loanRequest);
         return view('loan-request.show', compact('loanRequest'));
     }
 
@@ -61,6 +65,7 @@ class LoanRequestController extends Controller
      */
     public function edit(LoanRequest $loanRequest)
     {
+        $this->authorize('update', $loanRequest);
         return view('loan-request.edit', compact('loanRequest'));
     }
 
@@ -71,8 +76,9 @@ class LoanRequestController extends Controller
      * @param  \App\LoanRequest  $loanRequest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, LoanRequest $loanRequest)
+    public function update(LoanRequestStore $request, LoanRequest $loanRequest)
     {
+        $this->authorize('update', $loanRequest);
         $payload = $request->only('amount', 'duration', 'is_submitted') + ['member_id' => auth()->user()->id];
 		$loanRequest = $loanRequest->update($payload);
 
@@ -87,6 +93,7 @@ class LoanRequestController extends Controller
      */
     public function destroy(LoanRequest $loanRequest)
     {
+        $this->authorize('delete', $loanRequest);
 		$loanRequest->delete();
 		return redirect()->route('loan-requests.index');
     }
