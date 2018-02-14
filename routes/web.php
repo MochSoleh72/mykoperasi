@@ -19,11 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'member'])->group(function() {
     Route::resource('loan-requests', 'LoanRequestController');
 });
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('review', 'ReviewController@index')->name('reviews');
     Route::patch('review/{loan_request}/approve', 'ReviewController@approve')->name('reviews.approve');
     Route::patch('review/{loan_request}/reject', 'ReviewController@reject')->name('reviews.reject');
