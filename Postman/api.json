@@ -1,0 +1,202 @@
+{
+	"info": {
+		"name": "MyKoperasi",
+		"_postman_id": "832a8edb-c149-9553-9f7f-c5d467d1c763",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Loan Request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AUTH_TOKEN}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{HOST}}/api/loan-requests",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-requests"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Show Loan Request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AUTH_TOKEN}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{HOST}}/api/loan-requests/1",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-requests",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Store Loan Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AUTH_TOKEN}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 13000000,\n    \"duration\": 13,\n    \"is_submitted\": false\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/api/loan-requests",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-requests"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update Loan Request",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AUTH_TOKEN}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 13000000,\n    \"duration\": 13,\n    \"is_submitted\": false\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/api/loan-requests/1",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-requests",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Loan Request",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AUTH_TOKEN}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{HOST}}/api/loan-requests/2",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-requests",
+						"2"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "aec98d98-d701-4d86-8a15-364248d4c48b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e0c31888-8358-4c57-ba3c-491706eba103",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c2309e80-7fce-4f22-8dc3-cff1722d2445",
+			"key": "AUTH_TOKEN",
+			"value": "820b0341-7a01-3a40-ac3c-9160b69d8c8b",
+			"type": "text"
+		}
+	]
+}
