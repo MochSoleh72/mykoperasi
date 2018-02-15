@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Loan;
+use App\User;
 
 class Payment extends Model
 {
@@ -14,7 +15,7 @@ class Payment extends Model
 
     public function loan()
     {
-        return $this->belongsTo(Loan::class);
+        return $this->belongsTo(Loan::class, 'loan_id');
     }
 
     public static function totalPaidForMonth($month)
@@ -24,5 +25,10 @@ class Payment extends Model
                 $totalAmount += $payment->loan->monthly_amount;
                 return $totalAmount;
             }, 0);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
     }
 }

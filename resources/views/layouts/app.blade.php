@@ -29,7 +29,8 @@
                     <ul class="navbar-nav mr-auto">
                         @if (auth()->check() && auth()->user()->isAdmin())
                             <li><a class="nav-link" href="{{ route('reviews') }}">Pinjaman Baru</a></li>
-                            <li><a class="nav-link" href="#">Laporan</a></li>
+                            <li><a class="nav-link" href="{{ route('loans.index') }}">Angsuran</a></li>
+                            <li><a class="nav-link" href="{{ route('reports.index') }}">Laporan</a></li>
                         @endif
 
                         @if (auth()->check() && auth()->user()->isMember())
@@ -49,6 +50,7 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

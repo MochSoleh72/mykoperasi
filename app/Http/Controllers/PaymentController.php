@@ -3,89 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Payment;
+use App\Loan;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $summary = [
-            'current_month' => Payment::totalPaidForMonth(date('m')),
-            'last_month' => Payment::totalPaidForMonth(date('m') - 1),
-            'last_2_month' => Payment::totalPaidForMonth(date('m') - 2),
-        ];
-
-        return view('payment.index', compact('summary'));
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
+     * @param  \App\Loan  $loan
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Loan $loan)
     {
-        //
+        return view('payment.create', compact('loan'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Loan  $loan
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Loan $loan)
     {
-        //
-    }
+        $payload = [
+            'loan_id' => $loan->id,
+            'admin_id' => auth()->user()->id,
+            'created_at' => $request->get('payment_date')
+        ];
+        Payment::create($payload);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Payment $payment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Payment $payment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Payment $payment)
-    {
-        //
+        return redirect()->route('loans.show', $loan->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \App\Loan  $loan
      * @param  \App\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(Loan $loan, Payment $payment)
     {
-        //
+        $payment->delete();
+
+        return redirect()->route('loans.show', $loan->id);
     }
 }

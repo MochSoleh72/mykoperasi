@@ -23,9 +23,19 @@ Route::middleware(['auth', 'member'])->group(function() {
     Route::resource('loan-requests', 'LoanRequestController');
 });
 
+Route::middleware(['auth', 'member'])->group(function() {
+    Route::resource('loan-requests', 'LoanRequestController');
+});
+
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('review', 'ReviewController@index')->name('reviews');
     Route::patch('review/{loan_request}/approve', 'ReviewController@approve')->name('reviews.approve');
     Route::patch('review/{loan_request}/reject', 'ReviewController@reject')->name('reviews.reject');
-    Route::resource('payments', 'PaymentController');
+    Route::get('reports', 'ReportController@index')->name('reports.index');
+    Route::resource('loans', 'LoanController', ['only' => [
+        'index', 'show'
+    ]]);
+    Route::resource('loans.payments', 'PaymentController', ['only' => [
+        'create', 'store', 'destroy'
+    ]]);
 });
