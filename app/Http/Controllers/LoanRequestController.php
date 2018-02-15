@@ -13,10 +13,33 @@ class LoanRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $loanRequests = auth()->user()->loanRequests()->paginate(3);
-        return view('loan-request.index', compact('loanRequests'));
+        $status = $request->get('status', 'all');
+        $loanRequests = auth()->user()->loanRequests();
+        switch ($status) {
+            case 'approved':
+                $loanRequests = $loanRequests->approved()->paginate(3);
+                break;
+            case 'rejected':
+                $loanRequests = $loanRequests->rejected()->paginate(3);
+                break;
+            case 'waiting':
+                $loanRequests = $loanRequests->waiting()->paginate(3);
+                break;
+            case 'draft':
+                $loanRequests = $loanRequests->draft()->paginate(3);
+                break;
+            case 'all':
+            default:
+                $loanRequests = $loanRequests->paginate(3);
+                break;
+        }
+        $param = compact('loanRequests');
+        if ($status !== 'all') {
+            $param = compact('loanRequests', 'status');
+        }
+        return view('loan-request.index', $param);
     }
 
     /**

@@ -59,4 +59,24 @@ class LoanRequest extends Model
             return "Draft";
         }
     }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('is_submitted', true)
+            ->where('is_approved', true)
+            ->whereNotNull('admin_id');
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('is_submitted', true)
+            ->where('is_approved', false)
+            ->whereNotNull('admin_id');
+    }
+
+    public function scopeWaiting($query)
+    {
+        return $query->where('is_submitted', true)
+            ->whereNull('admin_id');
+    }
 }

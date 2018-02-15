@@ -13,6 +13,23 @@
                 <a href="{{ route('loan-requests.create') }}" class="btn btn-primary">Pinjaman baru</a>
                 </p>
 
+                <p> 
+                {!! Form::open(['route' => ['loan-requests.index'], 'method' => 'get', 'class' => 'form-inline'] ) !!}
+                    <div class="form-group">
+                        {!! Form::label('Status: ') !!}
+                        {!! Form::select('status', [
+                            'all' => 'All', 
+                            'approved' => 'Approved', 
+                            'rejected' => 'Rejected', 
+                            'waiting' => 'Waiting Approval', 
+                            'draft' => 'Draft'], 'all', ['class' => 'form-control']) !!}
+
+
+                      </div>
+                    {!! Form::submit('Filter', ['class'=>'btn btn-sm btn-primary']) !!}
+                {!! Form::close()!!}
+                </p>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -44,7 +61,7 @@
                 </table>
 
                 <p>
-                    {{ $loanRequests->links() }}
+                    {{ $loanRequests->appends(isset($status) ? compact('status') : null)->links() }}
                 </p>
 
             </div>
