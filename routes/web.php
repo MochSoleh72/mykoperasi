@@ -32,6 +32,7 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::patch('review/{loan_request}/approve', 'ReviewController@approve')->name('reviews.approve');
     Route::patch('review/{loan_request}/reject', 'ReviewController@reject')->name('reviews.reject');
     Route::get('reports', 'ReportController@index')->name('reports.index');
+    Route::get('reports/pdf', 'ReportController@downloadPdf')->name('reports.pdf');
     Route::resource('loans', 'LoanController', ['only' => [
         'index', 'show'
     ]]);

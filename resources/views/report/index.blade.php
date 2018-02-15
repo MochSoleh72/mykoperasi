@@ -25,8 +25,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <p><a href="{{ route('reports.pdf') }}" class="btn btn-primary">Download PDF</a></p>
             </div>
-        </div>
     </div>
 </div>
 @endsection
