@@ -99,7 +99,7 @@ class LoanSeeder extends Seeder
                 'duration' => $totalMonth,
                 'is_completed' => $monthLeftToPay == 0 ? true : false,
                 'monthly_amount' => $amountPerMonth,
-                'total_paid' => ($totalAmount / $totalMonth) * $totalPaidMonth,
+                'total_paid' => 0,
                 'total_amount' => $loanRequest->amount,
                 'created_at' => $createDate,
             ]);
