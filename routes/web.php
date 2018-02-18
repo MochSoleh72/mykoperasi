@@ -23,10 +23,6 @@ Route::middleware(['auth', 'member'])->group(function() {
     Route::resource('loan-requests', 'LoanRequestController');
 });
 
-Route::middleware(['auth', 'member'])->group(function() {
-    Route::resource('loan-requests', 'LoanRequestController');
-});
-
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('review', 'ReviewController@index')->name('reviews');
     Route::patch('review/{loan_request}/approve', 'ReviewController@approve')->name('reviews.approve');

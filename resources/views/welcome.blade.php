@@ -78,9 +78,7 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Koperasi App
-                </div>
+                <div class="title m-b-md">Halo App</div>
             </div>
         </div>
     </body>

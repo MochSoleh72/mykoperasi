@@ -16,8 +16,8 @@ class LoanSeeder extends Seeder
     {
         $admin = User::admin()->first();
         foreach (User::member()->get() as $user) {
-            $this->makeDraftLoan($user, 3)
-                ->makeSubmittedLoan($user, 3)
+            $this->makeDraftLoan($user, 20)
+                ->makeSubmittedLoan($user, 20)
                 ->makeRejectedLoan($user, $admin, 3)
                 ->makeOngoingLoan($user, $admin, 2, rand(1,4))
                 ->makeCompletedLoan($user, $admin, 2);

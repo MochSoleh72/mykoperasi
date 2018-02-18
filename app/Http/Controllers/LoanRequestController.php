@@ -15,29 +15,33 @@ class LoanRequestController extends Controller
      */
     public function index(Request $request)
     {
+        $perPage = $request->get('perPage', 3);
+        if ($perPage > 20) {
+            $perPage = 20;
+        }
         $status = $request->get('status', 'all');
         $loanRequests = auth()->user()->loanRequests();
         switch ($status) {
             case 'approved':
-                $loanRequests = $loanRequests->approved()->paginate(3);
+                $loanRequests = $loanRequests->approved()->paginate($perPage);
                 break;
             case 'rejected':
-                $loanRequests = $loanRequests->rejected()->paginate(3);
+                $loanRequests = $loanRequests->rejected()->paginate($perPage);
                 break;
             case 'waiting':
-                $loanRequests = $loanRequests->waiting()->paginate(3);
+                $loanRequests = $loanRequests->waiting()->paginate($perPage);
                 break;
             case 'draft':
-                $loanRequests = $loanRequests->draft()->paginate(3);
+                $loanRequests = $loanRequests->draft()->paginate($perPage);
                 break;
             case 'all':
             default:
-                $loanRequests = $loanRequests->paginate(3);
+                $loanRequests = $loanRequests->paginate($perPage);
                 break;
         }
-        $param = compact('loanRequests');
+        $param = compact('loanRequests', 'perPage');
         if ($status !== 'all') {
-            $param = compact('loanRequests', 'status');
+            $param = compact('loanRequests', 'status', 'perPage');
         }
         return view('loan-request.index', $param);
     }
