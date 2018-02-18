@@ -29,6 +29,8 @@
                             <option value="10" {{$perPage == 10 ? 'selected="selected"' : null}}>10</option>
                             <option value="20" {{$perPage == 20 || $perPage > 20 ? 'selected="selected"' : null}}>20</option>
                         </select>
+                        {!! Form::label('Peminjam: ') !!}
+                        {!! Form::text('ownerName', $ownerName, ['class' => 'form-control']) !!}
 
 
                       </div>
@@ -43,6 +45,7 @@
                             <th>Jumlah</th>
                             <th>Durasi</th>
                             <th>Status</th>
+                            <th>Peminjam</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -53,6 +56,7 @@
                             <td>Rp {{ number_format($loanRequest->amount) }}</td>
                             <td>{{ $loanRequest->duration }} bulan</td>
                             <td>{{ $loanRequest->status }}</td>
+                            <td>{{ $loanRequest->owner->name }}</td>
                             <td>
                                 @include('loan-request._status', ['loanRequest' => $loanRequest])
                             </td>

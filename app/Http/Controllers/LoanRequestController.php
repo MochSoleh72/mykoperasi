@@ -20,7 +20,13 @@ class LoanRequestController extends Controller
             $perPage = 20;
         }
         $status = $request->get('status', 'all');
-        $loanRequests = auth()->user()->loanRequests();
+        /* $loanRequests = auth()->user()->loanRequests(); */
+
+        // tampilkan semua, untuk contoh filter by peminjam
+        $ownerName = request()->get('ownerName');
+        $loanRequests = LoanRequest::whereHas('owner', function ($query) use ($ownerName) {
+            $query->where('name', 'like', "%$ownerName%");
+        });
         switch ($status) {
             case 'approved':
                 $loanRequests = $loanRequests->approved()->paginate($perPage);
@@ -39,9 +45,9 @@ class LoanRequestController extends Controller
                 $loanRequests = $loanRequests->paginate($perPage);
                 break;
         }
-        $param = compact('loanRequests', 'perPage');
+        $param = compact('loanRequests', 'perPage', 'ownerName');
         if ($status !== 'all') {
-            $param = compact('loanRequests', 'status', 'perPage');
+            $param = compact('loanRequests', 'status', 'perPage', 'ownerName');
         }
         return view('loan-request.index', $param);
     }
